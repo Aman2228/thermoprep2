@@ -85,6 +85,45 @@ export default function LibraryPage() {
       if (fileRef.current) fileRef.current.value = "";
     }
   };
+  const onDriveFile = async (driveFile: {
+    id: string;
+    name: string;
+  }) => {
+    try {
+      const response = await fetch(
+        `/api/google-drive/files/${driveFile.id}`,
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to download Drive file");
+      }
+  
+      const blob = await response.blob();
+  
+      const file = new File(
+        [blob],
+        driveFile.name,
+        { type: "application/pdf" },
+      );
+  
+      const documentId = await process(
+        file,
+        title || driveFile.name,
+        {
+          ocrScannedPages: ocrScanned,
+          ocrFigureLabels: ocrFigures,
+        },
+      );
+  
+      if (documentId) {
+        await refresh();
+        setShowDrive(false);
+        setTitle("");
+      }
+    } catch (error) {
+      console.error("DRIVE_FILE_PROCESS_FAILED:", error);
+    }
+  };
 
   const isBusy = progress.phase !== "idle" && progress.phase !== "done" && progress.phase !== "error";
 
