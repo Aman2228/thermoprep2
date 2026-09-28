@@ -49,11 +49,21 @@ export async function generateJson(options: GenerateOptions): Promise<unknown> {
 
   for (const provider of providers) {
     try {
+      console.error("AI_START:", provider.name, new Date().toISOString());
+      
+      const start = Date.now();
+      
       const text = await withRetry(
         () => provider.generateJson(options),
         provider.name === "openai"
           ? { retries: 0 }
           : undefined,
+      );
+      
+      console.error(
+        "AI_FINISHED:",
+        provider.name,
+        `${Date.now() - start}ms`,
       );
       return parseJsonLoose(text);
     } catch (error) {
