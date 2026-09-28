@@ -2,11 +2,6 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { db } from "@/lib/supabase";
 
-/**
- * v1 requested Google Drive scopes and carried a refresh-token dance through every
- * request, because textbooks lived in Drive. v2 uploads PDFs straight from the
- * browser and never touches Drive, so this is just identity: who is signed in.
- */
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
 
@@ -14,6 +9,19 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+
+      authorization: {
+        params: {
+          scope: [
+            "openid",
+            "email",
+            "profile",
+            "https://www.googleapis.com/auth/drive.readonly",
+          ].join(" "),
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
     }),
   ],
 
@@ -22,19 +30,31 @@ export const authOptions: NextAuthOptions = {
       if (user.email) {
         const { error } = await db()
           .from("users_app")
-          .upsert({ email: user.email, name: user.name, image: user.image });
+          .upsert({
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          });
 
-        if (error) console.error("USERS_APP_UPSERT_FAILED:", error.message);
+        if (error) {
+          console.error("USERS_APP_UPSERT_FAILED:", error.message);
+        }
       }
 
       return true;
     },
 
-    async jwt({ token }) {
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+      }
+
       return token;
     },
 
-    async session({ session }) {
+    async session({ session, token }) {
+      session.accessToken = token.accessToken as string | undefined;
       return session;
     },
   },
