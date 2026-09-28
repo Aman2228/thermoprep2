@@ -24,27 +24,47 @@ export default function LibraryPage() {
   const { progress, process, reset } = useDocumentPipeline();
 
   const [documents, setDocuments] = useState<DocumentRow[]>([]);
+  const [driveFiles, setDriveFiles] = useState<
+    {
+      id: string;
+      name: string;
+      size?: string | null;
+      modifiedTime?: string | null;
+    }[]
+  >([]);
+  
+  const [showDrive, setShowDrive] = useState(false);
+  const [driveLoading, setDriveLoading] = useState(false);
+  
   const [title, setTitle] = useState("");
   const [ocrScanned, setOcrScanned] = useState(true);
   const [ocrFigures, setOcrFigures] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [driveFiles, setDriveFiles] = useState<
-  {
-    id: string;
-    name: string;
-    size?: string | null;
-    modifiedTime?: string | null;
-  }[]
->([]);
 
-const [showDrive, setShowDrive] = useState(false);
-const [driveLoading, setDriveLoading] = useState(false);
 
   const refresh = async () => {
     const data = await call("/api/documents");
     if (data) setDocuments(data.documents);
   };
-
+  const loadDriveFiles = async () => {
+    setDriveLoading(true);
+  
+    try {
+      const response = await fetch("/api/google-drive/files");
+  
+      if (!response.ok) {
+        throw new Error("Could not access Google Drive");
+      }
+  
+      const data = await response.json();
+      setDriveFiles(data.files ?? []);
+      setShowDrive(true);
+    } catch (error) {
+      console.error("DRIVE_LOAD_FAILED:", error);
+    } finally {
+      setDriveLoading(false);
+    }
+  };
   useEffect(() => {
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,6 +121,14 @@ const [driveLoading, setDriveLoading] = useState(false);
 
             <div>
               <label className="block text-sm text-chalk-400 mb-1">PDF file</label>
+              <button
+                type="button"
+                onClick={loadDriveFiles}
+                disabled={driveLoading}
+                className="rounded-lg border px-4 py-2"
+              >
+                {driveLoading ? "Loading Drive…" : "Choose from Google Drive"}
+              </button>
               <input
                 ref={fileRef}
                 type="file"
