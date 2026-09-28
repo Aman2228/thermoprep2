@@ -58,7 +58,16 @@ export async function generateJson(options: GenerateOptions): Promise<unknown> {
       return parseJsonLoose(text);
     } catch (error) {
       lastError = error;
-      console.error(`AI_GENERATION_FAILED (${provider.name}):`, error instanceof Error ? error.message : error);
+      console.error(
+        `AI_GENERATION_FAILED (${provider.name}):`,
+        error instanceof Error
+          ? {
+              message: error.message,
+              name: error.name,
+              status: "status" in error ? error.status : undefined,
+            }
+          : error,
+      );
     }
   }
 
