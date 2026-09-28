@@ -28,6 +28,17 @@ export default function LibraryPage() {
   const [ocrScanned, setOcrScanned] = useState(true);
   const [ocrFigures, setOcrFigures] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [driveFiles, setDriveFiles] = useState<
+  {
+    id: string;
+    name: string;
+    size?: string | null;
+    modifiedTime?: string | null;
+  }[]
+>([]);
+
+const [showDrive, setShowDrive] = useState(false);
+const [driveLoading, setDriveLoading] = useState(false);
 
   const refresh = async () => {
     const data = await call("/api/documents");
