@@ -1,0 +1,142 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+  Direction: a mechanical-engineer's logbook, not a generic dark SaaS dashboard.
+  Deep blueprint ink background, a brass/instrument accent (slide rules, gauges),
+  faint graph-paper grid, and "worksheet" cards with a dashed tear-off top edge as
+  the one deliberately bold recurring motif.
+*/
+
+:root {
+  --ink-950: #0a141d;
+  --ink-900: #0e1c28;
+  --ink-800: #142B3B;
+  --ink-700: #1c3a4e;
+  --ink-600: #274a61;
+
+  --chalk-50: #f4f1e8;
+  --chalk-200: #d9dccf;
+  --chalk-400: #9fb0ad;
+
+  --brass-300: #e3c17c;
+  --brass-400: #cda45f;
+  --brass-500: #b3873f;
+
+  --ok-500: #5fae7a;
+  --ok-300: #9ed6b3;
+  --danger-500: #cf6a5c;
+  --danger-300: #ecb2a8;
+
+  --grid-line: rgba(244, 241, 232, 0.05);
+}
+
+@theme inline {
+  --color-ink-950: var(--ink-950);
+  --color-ink-900: var(--ink-900);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-chalk-50: var(--chalk-50);
+  --color-chalk-200: var(--chalk-200);
+  --color-chalk-400: var(--chalk-400);
+  --color-brass-300: var(--brass-300);
+  --color-brass-400: var(--brass-400);
+  --color-brass-500: var(--brass-500);
+  --color-ok-500: var(--ok-500);
+  --color-ok-300: var(--ok-300);
+  --color-danger-500: var(--danger-500);
+  --color-danger-300: var(--danger-300);
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--ink-950);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--chalk-50);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+}
+
+input, select, textarea, button {
+  font-size: 16px;
+}
+
+::selection {
+  background: var(--brass-500);
+  color: var(--ink-950);
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+
+.prose {
+  max-width: 100%;
+}
+
+.prose :is(h1, h2, h3, h4) {
+  font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  color: var(--chalk-50);
+}
+
+.prose :is(p, li) {
+  color: var(--chalk-200);
+}
+
+.prose strong {
+  color: var(--chalk-50);
+}
+
+.prose code {
+  background: var(--ink-800);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+}
+
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* The one bold recurring motif: a worksheet with a tear-off perforated edge. */
+.worksheet {
+  position: relative;
+  background: var(--ink-900);
+  border: 1px solid var(--ink-600);
+  border-radius: 1rem;
+}
+
+.worksheet::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 0;
+  border-top: 2px dashed var(--ink-600);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--ink-600);
+  border-radius: 999px;
+}
