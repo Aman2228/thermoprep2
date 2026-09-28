@@ -49,7 +49,12 @@ export async function generateJson(options: GenerateOptions): Promise<unknown> {
 
   for (const provider of providers) {
     try {
-      const text = await withRetry(() => provider.generateJson(options));
+      const text = await withRetry(
+        () => provider.generateJson(options),
+        provider.name === "openai"
+          ? { retries: 0 }
+          : undefined,
+      );
       return parseJsonLoose(text);
     } catch (error) {
       lastError = error;
