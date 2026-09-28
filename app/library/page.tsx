@@ -168,6 +168,33 @@ export default function LibraryPage() {
               >
                 {driveLoading ? "Loading Drive…" : "Choose from Google Drive"}
               </button>
+              {showDrive && (
+                <div className="mt-4 space-y-2">
+                  {driveFiles.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      No PDF files found in Google Drive.
+                    </p>
+                  ) : (
+                    driveFiles.map((file) => (
+                      <button
+                        key={file.id}
+                        type="button"
+                        onClick={() => onDriveFile(file)}
+                        className="block w-full rounded-lg border p-3 text-left hover:bg-muted"
+                      >
+                        <div className="font-medium">{file.name}</div>
+              
+                        {file.modifiedTime && (
+                          <div className="text-xs text-muted-foreground">
+                            Modified{" "}
+                            {new Date(file.modifiedTime).toLocaleDateString()}
+                          </div>
+                        )}
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
               <input
                 ref={fileRef}
                 type="file"
