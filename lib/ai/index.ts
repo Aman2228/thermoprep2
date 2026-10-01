@@ -55,9 +55,12 @@ export async function generateJson(options: GenerateOptions): Promise<unknown> {
       
       const text = await withRetry(
         () => provider.generateJson(options),
+        // Fail over quickly when a fallback exists; otherwise keep the default retries.
         provider.name === "openai"
           ? { retries: 0 }
-          : undefined,
+          : providers.length > 1
+            ? { retries: 1 }
+            : undefined,
       );
       
       console.error(
