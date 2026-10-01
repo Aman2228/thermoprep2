@@ -51,4 +51,4 @@ export const SCANNED_PAGE_CHAR_THRESHOLD = 40;
 export const SRS_DEFAULT_EASE = 2.5;
 export const SRS_MIN_EASE = 1.3;
 
-export const SESSION_TARGET_SIZE = 8;
+export const SESSION_TARGET_SIZE = 5;

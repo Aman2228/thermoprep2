@@ -53,7 +53,7 @@ Requirements:
 JSON:
 {"topic":"","questions":[{"type":"mcq|multi|integer|numerical|assertion|short","question":"","options":[],"answer":"","unit":"","tolerancePct":2,"solution":[],"explanation":"","trap":"","source":"textbook [S#] | general knowledge","difficulty":3}]}`;
 
-  return { system: SYSTEM, prompt, maxOutputTokens: Math.min(16000, 1400 + input.count * 950) };
+  return { system: SYSTEM, prompt, maxOutputTokens: Math.min(12000, 1200 + input.count * 700) };
 }
 
 export function buildGradePrompt(input: {
@@ -105,5 +105,5 @@ Requirements:
 JSON:
 {"topic":"","sourceNote":"which passages were used, and what came from general knowledge","overview":"","firstPrinciples":"","equations":[{"latex":"","meaning":"","units":"","validity":""}],"derivation":{"goal":"","steps":[],"result":""},"intuition":"","limitingCases":[{"case":"","result":""}],"traps":[],"example":{"problem":"","steps":[],"answer":""},"applications":[],"nextTopics":[],"figureQueries":[]}`;
 
-  return { system: SYSTEM, prompt, maxOutputTokens: 7000 };
+  return { system: SYSTEM, prompt, maxOutputTokens: 4500 };
 }
