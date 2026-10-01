@@ -101,7 +101,7 @@ export const openaiProvider: AiProvider = {
             ? { temperature: configuredTemperature }
             : {}),
         },
-        90_000,
+        240_000,
       );
 
       console.info("AI_USAGE", {

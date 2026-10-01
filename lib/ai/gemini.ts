@@ -33,6 +33,8 @@ export const geminiProvider: AiProvider = {
           responseMimeType: "application/json",
           maxOutputTokens,
           temperature: temperature ?? 0.4,
+          // Skip "thinking": it adds many seconds and can push requests past the Vercel timeout.
+          thinkingConfig: { thinkingBudget: 0 },
         },
       });
 
