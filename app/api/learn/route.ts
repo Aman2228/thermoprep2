@@ -8,7 +8,7 @@ import { retrieveContext } from "@/lib/retrieval";
 import { db } from "@/lib/supabase";
 import { getFiguresForPages } from "@/lib/figures";
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(req: NextRequest) {
   return handle(async () => {
